@@ -5,7 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -60,17 +63,22 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     LaunchedEffect(Unit) {
         // send request to get upcoming movies - first composition
        val response = TMDBInterface.getInstance()
-            .getUpcomingMovies("YOUR_API_KEY")
+            .getUpcomingMovies("456b638afee7c7179adac748bc9d5bc7")
 
        movieList = response.results
     }
 
     if(movieList.isEmpty()) {
-        Text(
-            text = "Loading..please wait",
-            modifier = modifier
-        )
-        CircularProgressIndicator()
+        Row(modifier = modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center) {
+            CircularProgressIndicator()
+            Text(
+                text = "Loading..please wait",
+                modifier = modifier
+            )
+
+        }
     }else {
 
         LazyColumn(modifier = modifier) {
@@ -80,7 +88,8 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
                     modifier = Modifier.padding(20.dp))
             }
            items(items = movieList) { movie ->
-               OutlinedCard(modifier = Modifier.fillMaxWidth()
+               OutlinedCard(modifier = Modifier
+                   .fillMaxWidth()
                    .padding(2.dp),
                    colors = CardColors(
                        contentColor = Color.Blue,
