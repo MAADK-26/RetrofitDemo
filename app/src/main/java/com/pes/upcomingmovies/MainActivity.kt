@@ -66,7 +66,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     LaunchedEffect(Unit) {
         // send request to get upcoming movies - first composition
        val response = TMDBInterface.getInstance()
-            .getUpcomingMovies("456b638afee7c7179adac748bc9d5bc7")
+            .getUpcomingMovies("YOUR_API_KEY")
 
        movieList = response.results
     }
