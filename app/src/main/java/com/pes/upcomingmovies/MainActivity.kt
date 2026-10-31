@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CardColors
@@ -34,6 +35,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.pes.upcomingmovies.ui.theme.UpcomingMoviesTheme
 
 class MainActivity : ComponentActivity() {
@@ -88,29 +91,48 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
                     modifier = Modifier.padding(20.dp))
             }
            items(items = movieList) { movie ->
-               OutlinedCard(modifier = Modifier
-                   .fillMaxWidth()
-                   .padding(2.dp),
-                   colors = CardColors(
-                       contentColor = Color.Blue,
-                       containerColor = Color.Cyan,
-                       disabledContainerColor = Color.LightGray,
-                       disabledContentColor = Color.LightGray
-                   )
-                  ) {
-                   Column(modifier = Modifier.padding(8.dp)
-                       ) {
-                       Text(movie.title,
-                           fontSize = 24.sp, color = Color.Black)
-                       Text("Rating: ${movie.vote_average}")
-                       Text("Releasing on: ${movie.release_date}")
-                       HorizontalDivider()
-                       Text(movie.overview,
-                           style = TextStyle(fontStyle = FontStyle.Italic))
-                   }
-               }
+               MovieCard(movie)
 
            }
+        }
+    }
+}
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+private fun MovieCard(movie: Movie) {
+    OutlinedCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(2.dp),
+        colors = CardColors(
+            contentColor = Color.Blue,
+            containerColor = Color.Cyan,
+            disabledContainerColor = Color.LightGray,
+            disabledContentColor = Color.LightGray
+        )
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            GlideImage(
+                model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+                contentDescription = "poster",
+                modifier = Modifier.size(width = 120.dp, height = 200.dp)
+            )
+            Column(
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Text(
+                    movie.title,
+                    fontSize = 24.sp, color = Color.Black
+                )
+                Text("Rating: ${movie.vote_average}")
+                Text("Releasing on: ${movie.release_date}")
+                HorizontalDivider()
+                Text(
+                    movie.overview,
+                    style = TextStyle(fontStyle = FontStyle.Italic)
+                )
+            }
         }
     }
 }
